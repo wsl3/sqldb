@@ -26,7 +26,7 @@
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="75">
-              <caret line="15" column="5" lean-forward="true" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
+              <caret line="15" column="5" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -56,7 +56,7 @@
         <entry file="file://$PROJECT_DIR$/src/dmap.h">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="528">
-              <caret line="16" column="30" lean-forward="true" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
+              <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
               <folding>
                 <element signature="e#80#99#0" expanded="true" />
               </folding>
@@ -71,6 +71,9 @@
       <find>String</find>
       <find>String</find>
     </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -92,6 +95,7 @@
     <option name="width" value="1390" />
     <option name="height" value="1007" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -103,11 +107,6 @@
             <path>
               <item name="sqldb" type="b2602c69:ProjectViewProjectNode" />
               <item name="sqldb" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="sqldb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="sqldb" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -155,12 +154,12 @@
       <workItem from="1554976167967" duration="6109000" />
       <workItem from="1555145771716" duration="599000" />
       <workItem from="1555309474068" duration="15390000" />
-      <workItem from="1555325510686" duration="1030000" />
+      <workItem from="1555325510686" duration="1348000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30500000" />
+    <option name="totallyTimeSpent" value="30818000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -178,7 +177,7 @@
       <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.12520775" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Version Control" order="0" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="1" visible="true" weight="0.6938998" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="1" visible="true" weight="0.69617486" />
       <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" order="3" />
       <window_info anchor="bottom" id="Messages" order="4" weight="0.36056644" />
@@ -245,7 +244,7 @@
     <entry file="file://$PROJECT_DIR$/src/dmap.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="528">
-          <caret line="16" column="30" lean-forward="true" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
+          <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
           <folding>
             <element signature="e#80#99#0" expanded="true" />
           </folding>
@@ -269,7 +268,7 @@
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
-          <caret line="15" column="5" lean-forward="true" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
+          <caret line="15" column="5" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
