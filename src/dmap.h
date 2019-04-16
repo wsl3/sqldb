@@ -18,6 +18,7 @@ public:
 
     HashEntry *next = nullptr;
     HashEntry(DBString* key=nullptr, Object* value=nullptr);
+    ~HashEntry();
 
 };
 
@@ -28,6 +29,7 @@ public:
     HashEntry **entrys;
 
     explicit HashTable(size_t s);
+    ~HashTable();
 };
 
 class DBMap : public Object {
@@ -40,9 +42,11 @@ public:
 
     //构造函数
     explicit DBMap(size_t s = 8);
-    size_t hashFunc(std::string key);
+    ~DBMap();
 
+    size_t hashFunc(std::string key);
     void insert(std::string key, Object* value);
+    void traversal();
 };
 #include "dmap.cpp"
 

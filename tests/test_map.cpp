@@ -33,7 +33,7 @@ int main() {
     //冲突数据
     m.insert("冲突", v1);
     m.insert("冲突", v1);
-    m.insert("冲突", v1);
+    m.insert("冲突", v3);
 
     for(int i=0;i<m.ht->size;i++){
         if(m.ht->entrys[i] == nullptr){

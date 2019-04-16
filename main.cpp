@@ -18,27 +18,15 @@ int main() {
     v2->append(s);
     v2->appendl(s1);
 
-    m.insert(s, v1);
-    m.insert(s1, v2);
-    m.insert("1", v1);
-    m.insert("2", v1);
-    m.insert("2", v1);
-    m.insert("2", v1);
-    m.insert("3", v1);
+//    m.insert(s, v1);
+//    m.insert(s1, v2);
 
-    for(int i=0;i<m.ht->size;i++){
-        if(m.ht->entrys[i] == nullptr){
-            cout<<i<<"---> NULL"<<endl;
-        }else{
-            cout<<i;
-            auto *p=m.ht->entrys[i];
-            while(p != nullptr){
-                cout<<"---> "<<"( "<<p->key->buff<<", "<<p->value->type<<" )";
-                p = p->next;
-            }
-            cout<<endl;
-        }
-    }
+
+    m.insert("2", v1);
+    m.insert("2", v2);
+//    m.insert("3", v1);
+
+    m.traversal();
 
     cout << endl;
     return 0;
