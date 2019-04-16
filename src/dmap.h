@@ -7,7 +7,9 @@
 
 #include "object.h"
 #include "dstring.h"
+#include <unordered_map>
 
+std::hash<std::string> hasher;
 
 class HashEntry {
 public:
@@ -15,32 +17,34 @@ public:
     Object *value = nullptr;
 
     HashEntry *next = nullptr;
-
+    HashEntry(DBString* key=nullptr, Object* value=nullptr);
 
 };
 
 class HashTable {
 public:
-    int size;
-    int used;
+    size_t size;
+    size_t used;
     HashEntry **entrys;
 
-    explicit HashTable(int s);
+    explicit HashTable(size_t s);
 };
 
 class DBMap : public Object {
 public:
 
-    HashTable *ht;
+
     int rehash = -1;
+    HashTable *ht;
     HashTable *ht_temp;
 
+    //构造函数
+    explicit DBMap(size_t s = 8);
+    size_t hashFunc(std::string key);
 
-    explicit DBMap(int s = 8);
-
-//    void insert(DBString key, Object value);
+    void insert(std::string key, Object* value);
 };
-
 #include "dmap.cpp"
+
 
 #endif
