@@ -16,6 +16,11 @@ public:
     explicit Object(int t) {
         type = t;
     }
+
+    virtual std::string values()=0;
+    virtual ~Object(){
+        std::cout<<"delete "<<"Object"<<std::endl;
+    };
 };
 
 #endif //SQLDB_OBJECT_H

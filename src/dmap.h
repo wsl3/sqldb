@@ -42,10 +42,12 @@ public:
 
     //构造函数
     explicit DBMap(size_t s = 8);
-    ~DBMap();
+    ~DBMap() override;
 
+    std::string values() override;
     size_t hashFunc(std::string key);
     void insert(std::string key, Object* value);
+    Object* get(std::string key);
     void traversal();
 };
 #include "dmap.cpp"

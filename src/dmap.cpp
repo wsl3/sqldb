@@ -11,6 +11,7 @@ DBMap::DBMap(size_t s) : Object(DBMAP_OBJECT) {
 }
 
 DBMap::~DBMap() {
+    std::cout<<"delete DBMap"<<"\n";
     delete ht;
 }
 
@@ -20,6 +21,7 @@ HashEntry::HashEntry(DBString *key, Object *value) {
 }
 
 HashEntry::~HashEntry() {
+    std::cout<<"delete HashEntry"<<std::endl;
     delete key;
     delete value;
 }
@@ -34,6 +36,7 @@ HashTable::HashTable(size_t s) {
 }
 
 HashTable::~HashTable() {
+    std::cout<<"delete ht"<<std::endl;
     for (int i = 0; (i < size) && (used > 0); i++) {
         if (entrys[i] != nullptr) {
             delete entrys[i];
@@ -74,7 +77,7 @@ void DBMap::insert(std::string key, Object *value) {
 }
 
 void DBMap::traversal() {
-    std::cout<<"size: "<<ht->size<<" used: "<<ht->used<<std::endl;
+    std::cout << "size: " << ht->size << " used: " << ht->used << std::endl;
     for (int i = 0; i < ht->size; i++) {
         if (ht->entrys[i] == nullptr) {
             std::cout << i << "---> NULL" << std::endl;
@@ -88,4 +91,25 @@ void DBMap::traversal() {
             std::cout << std::endl;
         }
     }
+}
+
+Object *DBMap::get(std::string key) {
+    size_t index = hashFunc(key);
+    if (ht->entrys[index] == nullptr) {
+        return nullptr;
+    } else {
+        auto *p = ht->entrys[index];
+        while (p != nullptr) {
+            if (p->key->buff == key) {
+                return p->value;
+            } else {
+                p = p->next;
+            }
+        }
+        return nullptr;
+    }
+}
+
+std::string DBMap::values(){
+    return "Map values";
 }

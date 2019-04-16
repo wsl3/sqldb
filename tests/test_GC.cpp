@@ -1,8 +1,11 @@
-#include <iostream>
-#include "src/dstring.h"
-#include"src/dlist.h"
-#include "src/dmap.h"
+//
+// Created by wsl on 19-4-16.
+//
 
+#include <iostream>
+#include "../src/dstring.h"
+#include"../src/dlist.h"
+#include "../src/dmap.h"
 using namespace std;
 
 int main() {

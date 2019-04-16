@@ -14,12 +14,19 @@ public:
     std::string buff;
 
     explicit DBString(std::string s);
-
+    std::string values() override;
+    ~DBString() override;
 };
 
 DBString::DBString(std::string s):Object(DBSTRING_OBJECT) {
     buff = s;
     length = s.length();
+}
+std::string DBString::values() {
+    return buff;
+}
+DBString::~DBString() {
+    std::cout<< "delete "<<buff<<std::endl;
 }
 
 

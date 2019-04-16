@@ -30,8 +30,9 @@ public:
 
     DBList();
 
-    ~DBList();
+    ~DBList() override;
 
+    std::string values() override;
     void append(std::string v);
 
     void appendl(std::string v);
@@ -61,13 +62,21 @@ DBList::DBList() : Object(DBLIST_OBJECT) {
 
 //链表析构函数
 DBList::~DBList() {
+    std::cout<<"delete DBList"<<std::endl;
     while (head != nullptr) {
         auto *p = head;
         head = head->next;
         delete p;
     }
-    std::cout<<"DBList析构回收完毕!"<<std::endl;
+
 }
+
+std::string DBList::values(){
+    return "List Values";
+}
+
+
+
 
 //链表添加元素
 void DBList::append(std::string v) {
