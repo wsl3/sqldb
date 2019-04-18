@@ -17,7 +17,9 @@ public:
     Object *value = nullptr;
 
     HashEntry *next = nullptr;
-    HashEntry(DBString* key=nullptr, Object* value=nullptr);
+
+    HashEntry(DBString *key = nullptr, Object *value = nullptr);
+
     ~HashEntry();
 
 };
@@ -29,28 +31,40 @@ public:
     HashEntry **entrys;
 
     explicit HashTable(size_t s);
+
     ~HashTable();
 };
 
 class DBMap : public Object {
 public:
 
-
+    //决定是否重新哈希
     int rehash = -1;
+
     HashTable *ht;
     HashTable *ht_temp;
 
     //构造函数
     explicit DBMap(size_t s = 8);
+
     ~DBMap() override;
 
     std::string values() override;
-    size_t hashFunc(std::string key);
-    void insert(std::string key, Object* value);
-    Object* get(std::string key);
-    void traversal();
-};
-#include "dmap.cpp"
 
+    size_t hashFunc(std::string key);
+
+    void insert(std::string key, Object *value);
+
+    std::string get(std::string key);
+
+    void traversal();
+
+    void keys();
+
+    void rehashCheck();
+    void rehashFunction();
+};
+
+#include "dmap.cpp"
 
 #endif

@@ -15,7 +15,7 @@ public:
     int type; // sqldb中object的类别
     explicit Object(int t) {
         type = t;
-    }
+    };
 
     virtual std::string values()=0;
     virtual ~Object(){

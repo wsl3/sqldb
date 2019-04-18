@@ -6,13 +6,14 @@
 //构造函数
 DBMap::DBMap(size_t s) : Object(DBMAP_OBJECT) {
     rehash = -1;
-    ht_temp = nullptr;
+    ht_temp = new HashTable(0);
     ht = new HashTable(s);
 }
 
 DBMap::~DBMap() {
-    std::cout<<"delete DBMap"<<"\n";
+    std::cout << "delete DBMap" << "\n";
     delete ht;
+    delete ht_temp;
 }
 
 HashEntry::HashEntry(DBString *key, Object *value) {
@@ -21,7 +22,7 @@ HashEntry::HashEntry(DBString *key, Object *value) {
 }
 
 HashEntry::~HashEntry() {
-    std::cout<<"delete HashEntry"<<std::endl;
+    std::cout << "delete HashEntry" << std::endl;
     delete key;
     delete value;
 }
@@ -36,7 +37,7 @@ HashTable::HashTable(size_t s) {
 }
 
 HashTable::~HashTable() {
-    std::cout<<"delete ht"<<std::endl;
+    std::cout << "delete ht" << std::endl;
     for (int i = 0; (i < size) && (used > 0); i++) {
         if (entrys[i] != nullptr) {
             delete entrys[i];
@@ -53,12 +54,17 @@ size_t DBMap::hashFunc(std::string key) {
 
 // 向哈希表中添加数据的时候, 如果有Key则只改变对应的value
 void DBMap::insert(std::string key, Object *value) {
+    rehashCheck();
+
     size_t index = hashFunc(key);
     DBString *key_p = new DBString(key);
-    if (ht->entrys[index] == nullptr) {
-        ht->entrys[index] = new HashEntry(key_p, value);
+
+    HashTable *htp = rehash == -1 ? ht : ht_temp;
+
+    if (htp->entrys[index] == nullptr) {
+        htp->entrys[index] = new HashEntry(key_p, value);
     } else {
-        HashEntry *p = ht->entrys[index];
+        HashEntry *p = htp->entrys[index];
         HashEntry *prev = p;
         while (p != nullptr) {
             // check key
@@ -73,7 +79,7 @@ void DBMap::insert(std::string key, Object *value) {
         prev->next = new HashEntry(key_p, value);
     }
     // used+1
-    ht->used += 1;
+    htp->used += 1;
 }
 
 void DBMap::traversal() {
@@ -93,7 +99,9 @@ void DBMap::traversal() {
     }
 }
 
-Object *DBMap::get(std::string key) {
+
+// 字典 get(key) 操作
+std::string DBMap::get(std::string key) {
     size_t index = hashFunc(key);
     if (ht->entrys[index] == nullptr) {
         return nullptr;
@@ -101,15 +109,69 @@ Object *DBMap::get(std::string key) {
         auto *p = ht->entrys[index];
         while (p != nullptr) {
             if (p->key->buff == key) {
-                return p->value;
+                return p->value->values();
             } else {
                 p = p->next;
             }
         }
-        return nullptr;
+        return "";
     }
 }
 
-std::string DBMap::values(){
+std::string DBMap::values() {
     return "Map values";
+}
+
+// get all the key of the dict
+void DBMap::keys() {
+    int i = 0;
+    int num = 1;
+    for (; i < ht->size; i++) {
+        if (ht->entrys[i] != nullptr) {
+            auto *p = ht->entrys[i];
+            while (p != nullptr) {
+                std::cout << num++ << "): " << p->key->buff << std::endl;
+                p = p->next;
+            }
+        }
+    }
+}
+
+//rehash check
+void DBMap::rehashCheck() {
+    if ((ht->used / (ht->size * 1.0)) >= 0.75) {
+        std::cout<<"\n冲突因子大于0.75, 即将重新哈希...."<<std::endl;
+        rehash = 0;
+        rehashFunction();
+    }
+}
+
+//重新哈希
+void DBMap::rehashFunction() {
+    if (rehash != 0) {
+        return;
+    }
+
+    size_t resize = ht->size < 5000 ? (ht->size * 4) : (ht->size) * 2;
+    ht_temp->entrys = new HashEntry *[resize];
+    ht_temp->size = resize;
+    std::cout<<"正在重新哈希, resize: "<<resize<<std::endl;
+
+    for (int i = 0; i < ht_temp->size; i++) {
+        ht_temp->entrys[i] = nullptr;
+
+        if (i < (ht->size) && (ht->entrys[i] != nullptr)) {
+            ht_temp->entrys[i] = ht->entrys[i];
+            ht_temp->used += 1;
+            ht->entrys[i] = nullptr;
+        }
+    }
+
+    ht->size = 0;
+    ht->used = 0;
+
+    auto *temp = ht;
+    ht = ht_temp;
+    ht_temp = temp;
+    rehash = -1;
 }
