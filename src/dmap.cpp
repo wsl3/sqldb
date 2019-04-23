@@ -175,3 +175,11 @@ void DBMap::rehashFunction() {
     ht_temp = temp;
     rehash = -1;
 }
+
+bool DBMap::has_key(std::string key) {
+    size_t index = hashFunc(key);
+    if(ht->entrys[index]==nullptr){
+        return false;
+    }
+    return true;
+}

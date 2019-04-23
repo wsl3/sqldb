@@ -60,9 +60,10 @@ public:
     void traversal();
 
     void keys();
-
+    bool has_key(std::string);
     void rehashCheck();
     void rehashFunction();
+
 };
 
 #include "dmap.cpp"

@@ -42,10 +42,12 @@ void lexer(std::string str, std::vector<std::string> &tokens) {
         }
     } catch (LexerException &e) {
         std::cout << e.what() << std::endl;
+        tokens.clear();
     }
 
 
 }
+
 
 
 //从命令行读取 string, 返回 tokens
@@ -53,9 +55,8 @@ std::vector<std::string> readCommand() {
 
     std::string str;
     std::vector<std::string> tokens;
-    std::cout<<"sqldb>> ";
+    std::cout<<"\nsqldb >>> ";
     std::getline(std::cin, str);
-
     lexer(str, tokens);
     return tokens;
 }
