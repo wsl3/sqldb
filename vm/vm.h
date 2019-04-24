@@ -25,6 +25,9 @@ private:
 
     void setFunc(vector<string> tokens);
 
+    void lpushFunc(vector<string> tokens);
+    void rangeFunc(vector<string> tokens);
+
 public:
     VirtualMachine();
 
@@ -54,7 +57,11 @@ void VirtualMachine::run() {
             case EXIST:
                 existFunc(tokens);
                 break;
-
+            case LPUSH:
+                lpushFunc(tokens);
+                break;
+            case RANGE:
+                rangeFunc(tokens);
             case EXIT:
                 exit(1);
 
@@ -79,7 +86,7 @@ void VirtualMachine::init() {
 }
 
 void VirtualMachine::getFunc(vector<string> tokens) {
-    cout << "get 操作\n";
+    //cout << "get 操作\n";
     string value = mp->get(tokens[1]);
     cout << value;
 }
@@ -97,6 +104,23 @@ void VirtualMachine::existFunc(vector<string> tokens) {
         cout << "有的有的\n";
     } else {
         cout << "没有\n";
+    }
+}
+
+void VirtualMachine::lpushFunc(vector<string> tokens) {
+    string key = tokens[1];
+    auto *value = new DBList();
+    for (int i = 2; i < tokens.size(); i++) {
+        value->append(tokens[i]);
+    }
+    mp->insert(key, value);
+}
+
+void VirtualMachine::rangeFunc(vector<string> tokens) {
+    string key = tokens[1];
+    auto* p = (DBList*)(mp->get(key));
+    if(p!=nullptr){
+
     }
 }
 

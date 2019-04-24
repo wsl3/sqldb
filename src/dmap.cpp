@@ -101,7 +101,7 @@ void DBMap::traversal() {
 
 
 // 字典 get(key) 操作
-std::string DBMap::get(std::string key) {
+Object* DBMap::get(std::string key) {
     size_t index = hashFunc(key);
     if (ht->entrys[index] == nullptr) {
         return nullptr;
@@ -109,12 +109,12 @@ std::string DBMap::get(std::string key) {
         auto *p = ht->entrys[index];
         while (p != nullptr) {
             if (p->key->buff == key) {
-                return p->value->values();
+                return p->value;
             } else {
                 p = p->next;
             }
         }
-        return "";
+        return nullptr;
     }
 }
 
@@ -140,7 +140,7 @@ void DBMap::keys() {
 //rehash check
 void DBMap::rehashCheck() {
     if ((ht->used / (ht->size * 1.0)) >= 0.75) {
-        std::cout<<"\n冲突因子大于0.75, 即将重新哈希...."<<std::endl;
+        std::cout << "\n冲突因子大于0.75, 即将重新哈希...." << std::endl;
         rehash = 0;
         rehashFunction();
     }
@@ -155,7 +155,7 @@ void DBMap::rehashFunction() {
     size_t resize = ht->size < 5000 ? (ht->size * 4) : (ht->size) * 2;
     ht_temp->entrys = new HashEntry *[resize];
     ht_temp->size = resize;
-    std::cout<<"正在重新哈希, resize: "<<resize<<std::endl;
+    std::cout << "正在重新哈希, resize: " << resize << std::endl;
 
     for (int i = 0; i < ht_temp->size; i++) {
         ht_temp->entrys[i] = nullptr;
@@ -178,8 +178,9 @@ void DBMap::rehashFunction() {
 
 bool DBMap::has_key(std::string key) {
     size_t index = hashFunc(key);
-    if(ht->entrys[index]==nullptr){
-        return false;
+    auto *p = ht->entrys[index];
+    while (p != nullptr && (p->key->buff) != key) {
+        p = p->next;
     }
-    return true;
+    return p? true : false;
 }

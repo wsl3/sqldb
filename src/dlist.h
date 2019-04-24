@@ -36,7 +36,7 @@ public:
     void append(std::string v);
 
     void appendl(std::string v);
-
+    void range(int begin, int end);
     void pop();
 
     void lpop();

@@ -55,7 +55,7 @@ public:
 
     void insert(std::string key, Object *value);
 
-    std::string get(std::string key);
+    Object* get(std::string key);
 
     void traversal();
 
