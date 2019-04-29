@@ -26,6 +26,7 @@ private:
     void setFunc(vector<string> tokens);
 
     void lpushFunc(vector<string> tokens);
+
     void rangeFunc(vector<string> tokens);
 
 public:
@@ -62,6 +63,7 @@ void VirtualMachine::run() {
                 break;
             case RANGE:
                 rangeFunc(tokens);
+                break;
             case EXIT:
                 exit(1);
 
@@ -85,10 +87,26 @@ void VirtualMachine::init() {
     _init(dict);
 }
 
+// get key
 void VirtualMachine::getFunc(vector<string> tokens) {
     //cout << "get 操作\n";
-    string value = mp->get(tokens[1]);
-    cout << value;
+    auto *p = mp->get(tokens[1]);
+    if (p == nullptr) {
+        std::cout << "I got Nothing!" << std::endl;
+        return;
+    }
+    switch (p->type) {
+        case 1:
+            cout << ((DBString *) p)->buff << endl;
+            break;
+        case 2:
+            cout << ((DBList *) p)->values() << endl;
+            break;
+
+        case 3:
+            cout << ((DBMap *) p)->values() << endl;
+            break;
+    }
 }
 
 void VirtualMachine::setFunc(vector<string> tokens) {
@@ -101,9 +119,9 @@ void VirtualMachine::setFunc(vector<string> tokens) {
 
 void VirtualMachine::existFunc(vector<string> tokens) {
     if (mp->has_key(tokens[1])) {
-        cout << "有的有的\n";
+        cout << "I find it!" << endl;
     } else {
-        cout << "没有\n";
+        cout << "I don't find it" << endl;
     }
 }
 
@@ -116,11 +134,14 @@ void VirtualMachine::lpushFunc(vector<string> tokens) {
     mp->insert(key, value);
 }
 
+// range key begin end
 void VirtualMachine::rangeFunc(vector<string> tokens) {
     string key = tokens[1];
-    auto* p = (DBList*)(mp->get(key));
-    if(p!=nullptr){
-
+    auto *p = (DBList *) (mp->get(key));
+    if (p != nullptr) {
+        p->range(stoi(tokens[2]), stoi(tokens[3]));
+    } else {
+        cout << "I don't find the key: " + key << endl;
     }
 }
 

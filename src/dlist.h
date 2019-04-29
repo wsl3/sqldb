@@ -33,10 +33,13 @@ public:
     ~DBList() override;
 
     std::string values() override;
+
     void append(std::string v);
 
     void appendl(std::string v);
+
     void range(int begin, int end);
+
     void pop();
 
     void lpop();
@@ -62,7 +65,7 @@ DBList::DBList() : Object(DBLIST_OBJECT) {
 
 //链表析构函数
 DBList::~DBList() {
-    std::cout<<"delete DBList"<<std::endl;
+    std::cout << "delete DBList" << std::endl;
     while (head != nullptr) {
         auto *p = head;
         head = head->next;
@@ -71,11 +74,9 @@ DBList::~DBList() {
 
 }
 
-std::string DBList::values(){
+std::string DBList::values() {
     return "List Values";
 }
-
-
 
 
 //链表添加元素
@@ -159,4 +160,22 @@ void DBList::del(int index) {
 
 }
 
+void DBList::range(int begin, int end) {
+
+    if(begin>(length-1) || end <0 || begin>end){
+        std::cout<<"Error: Index is error!"<<std::endl;
+        return;
+    }
+    int i=0;
+    auto *p = this->head;
+    while (i!=begin){
+        i++;
+        p=p->next;
+    }
+    while (begin<=end && p!= nullptr){
+        std::cout<<begin<<": "<<p->buff<<std::endl;
+        begin ++;
+        p=p->next;
+    }
+}
 #endif //SQLDB_DLIST_H
