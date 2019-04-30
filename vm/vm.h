@@ -29,6 +29,10 @@ private:
 
     void rangeFunc(vector<string> tokens);
 
+    void keysFunc(vector<string> tokens);
+    void hsetFunc(vector<string> tokens);
+    void hgetFunc(vector<string> tokens);
+
 public:
     VirtualMachine();
 
@@ -49,23 +53,40 @@ void VirtualMachine::run() {
         }
 
         switch (dict[tokens[0]]) {
+            //String
             case GET:
                 getFunc(tokens);
                 break;
             case SET:
                 setFunc(tokens);
                 break;
-            case EXIST:
-                existFunc(tokens);
-                break;
+            // List
             case LPUSH:
                 lpushFunc(tokens);
                 break;
             case RANGE:
                 rangeFunc(tokens);
                 break;
+            // Map
+            case KEYS:
+                keysFunc(tokens);
+                break;
+            case HSET:
+                hsetFunc(tokens);
+                break;
+            case HGET:
+                hgetFunc(tokens);
+                break;
+
+
+            case EXIST:
+                existFunc(tokens);
+                break;
             case EXIT:
                 exit(1);
+            default:
+                cout<<"I don't know what are you f**k saying!!!"<<endl;
+                break;
 
         }
 
@@ -145,4 +166,47 @@ void VirtualMachine::rangeFunc(vector<string> tokens) {
     }
 }
 
+//keys or keys map_name
+void VirtualMachine::keysFunc(vector<string> tokens) {
+    if(tokens.size()==1){
+        mp->keys();
+        return;
+    }
+    auto *p = (DBMap*)mp->get(tokens[1]);
+    p->keys();
+}
+
+// hset map_name k1 v1 k2 v2
+// 首先查看数据库中是否有 map_name
+void VirtualMachine::hsetFunc(vector<string> tokens) {
+    DBMap* value;
+    bool is_here = mp->has_key(tokens[1]);
+    if(is_here){
+        value = (DBMap*)mp->get(tokens[1]);
+    }else{
+        value = new DBMap();
+    }
+
+    for(int i=2;i<=tokens.size()-2;i=i+2){
+        value->insert(tokens[i], tokens[i+1]);
+    }
+    if(!is_here){
+        mp->insert(tokens[1], value);
+    }
+}
+
+// hget map_name key
+void VirtualMachine::hgetFunc(vector<string> tokens) {
+    auto *p = (DBMap*)mp->get(tokens[1]);
+    if(p!= nullptr){
+        auto* value = p->get(tokens[2]);
+        if(value != nullptr){
+            cout<<value->values()<<endl;
+        }else{
+            cout<<"There is not this key in the db!"<<endl;
+        }
+    }else{
+        cout<<"There is not this db!"<<endl;
+    }
+}
 #endif //SQLDB_VM_H

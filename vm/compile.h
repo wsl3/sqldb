@@ -55,7 +55,7 @@ std::vector<std::string> readCommand() {
 
     std::string str;
     std::vector<std::string> tokens;
-    std::cout<<"\nsqldb >>> ";
+    std::cout<<"sqldb >>> ";
     std::getline(std::cin, str);
     lexer(str, tokens);
     return tokens;

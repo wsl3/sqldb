@@ -82,6 +82,12 @@ void DBMap::insert(std::string key, Object *value) {
     htp->used += 1;
 }
 
+// insert
+void DBMap::insert(std::string key, std::string value){
+    DBString* p = new DBString(value);
+    insert(key, p);
+}
+
 void DBMap::traversal() {
     std::cout << "size: " << ht->size << " used: " << ht->used << std::endl;
     for (int i = 0; i < ht->size; i++) {
@@ -182,5 +188,5 @@ bool DBMap::has_key(std::string key) {
     while (p != nullptr && (p->key->buff) != key) {
         p = p->next;
     }
-    return p? true : false;
+    return p!= nullptr? true : false;
 }
