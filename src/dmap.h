@@ -53,12 +53,13 @@ public:
 
     size_t hashFunc(std::string key);
 
+
     void insert(std::string key, Object *value);
     void insert(std::string key, std::string value);
     Object* get(std::string key);
-
+    void del(std::string key);
     void traversal();
-
+    void types(std::string key);
     void keys();
     bool has_key(std::string);
     void rehashCheck();

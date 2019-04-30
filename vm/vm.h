@@ -6,6 +6,7 @@
 #define SQLDB_VM_H
 
 #include <vector>
+#include "../src/object.h"
 #include "compile.h"
 #include "cmdobjects.h"
 #include "../src/dmap.h"
@@ -30,9 +31,20 @@ private:
     void rangeFunc(vector<string> tokens);
 
     void keysFunc(vector<string> tokens);
+
     void hsetFunc(vector<string> tokens);
+
     void hgetFunc(vector<string> tokens);
 
+    void delFunc(vector<string> tokens);
+
+    void ldelFunc(vector<string> tokens);
+
+    void hdelFunc(vector<string> tokens);
+
+    void catFunc(vector<string> tokens);
+
+    void typeFunc(vector<string> tokens);
 public:
     VirtualMachine();
 
@@ -60,14 +72,14 @@ void VirtualMachine::run() {
             case SET:
                 setFunc(tokens);
                 break;
-            // List
+                // List
             case LPUSH:
                 lpushFunc(tokens);
                 break;
             case RANGE:
                 rangeFunc(tokens);
                 break;
-            // Map
+                // Map
             case KEYS:
                 keysFunc(tokens);
                 break;
@@ -78,14 +90,34 @@ void VirtualMachine::run() {
                 hgetFunc(tokens);
                 break;
 
-
+                //del string_key
+            case DEL:
+                delFunc(tokens);
+                break;
+                //ldel list_index
+            case LDEL:
+                ldelFunc(tokens);
+                break;
+                //hdel map_name key
+            case HDEL:
+                hdelFunc(tokens);
+                break;
             case EXIST:
                 existFunc(tokens);
+                break;
+
+                //type 检查key的类型
+            case TYPES:
+                typeFunc(tokens);
+                break;
+                //cat 查看内部情况
+            case CAT:
+                catFunc(tokens);
                 break;
             case EXIT:
                 exit(1);
             default:
-                cout<<"I don't know what are you f**k saying!!!"<<endl;
+                cout << "I don't know what are you f**k saying!!!" << endl;
                 break;
 
         }
@@ -97,7 +129,7 @@ VirtualMachine::VirtualMachine() {
     //cmd 初始化
     init();
     //数据库底层 哈系表初始化
-    mp = new DBMap(1000);
+    mp = new DBMap(10);
 }
 
 VirtualMachine::~VirtualMachine() {
@@ -110,7 +142,6 @@ void VirtualMachine::init() {
 
 // get key
 void VirtualMachine::getFunc(vector<string> tokens) {
-    //cout << "get 操作\n";
     auto *p = mp->get(tokens[1]);
     if (p == nullptr) {
         std::cout << "I got Nothing!" << std::endl;
@@ -131,10 +162,17 @@ void VirtualMachine::getFunc(vector<string> tokens) {
 }
 
 void VirtualMachine::setFunc(vector<string> tokens) {
-    cout << "set 操作\n";
     string key = tokens[1];
-    DBString *value = new DBString(tokens[2]);
-    mp->insert(key, value);
+    auto *value = (DBString*)mp->get(key);
+    if(value!=nullptr&& value->type!=DBSTRING_OBJECT){
+        cout<<"This key has exist!"<<endl;
+        return;
+    }else if(value== nullptr){
+        value = new DBString(key);
+        mp->insert(key, value);
+    }else{
+        value->buff = key;
+    }
 
 }
 
@@ -146,13 +184,25 @@ void VirtualMachine::existFunc(vector<string> tokens) {
     }
 }
 
+// lpush list 1 2 3
 void VirtualMachine::lpushFunc(vector<string> tokens) {
     string key = tokens[1];
-    auto *value = new DBList();
+    auto *value = (DBList*)mp->get(key);
+    bool is_here = true;
+    if(value!= nullptr&& value->type!=DBLIST_OBJECT){
+        cout<<"This key has exist!"<<endl;
+        return;
+    }else if(value ==nullptr){
+        value = new DBList();
+        is_here=false;
+    }
+
     for (int i = 2; i < tokens.size(); i++) {
         value->append(tokens[i]);
     }
-    mp->insert(key, value);
+    if(!is_here){
+        mp->insert(key, value);
+    }
 }
 
 // range key begin end
@@ -168,27 +218,29 @@ void VirtualMachine::rangeFunc(vector<string> tokens) {
 
 //keys or keys map_name
 void VirtualMachine::keysFunc(vector<string> tokens) {
-    if(tokens.size()==1){
+    if (tokens.size() == 1) {
         mp->keys();
         return;
     }
-    auto *p = (DBMap*)mp->get(tokens[1]);
+    auto *p = (DBMap *) mp->get(tokens[1]);
     p->keys();
 }
 
 // hset map_name k1 v1 k2 v2
 // 首先查看数据库中是否有 map_name
 void VirtualMachine::hsetFunc(vector<string> tokens) {
-    DBMap* value;
-    bool is_here = mp->has_key(tokens[1]);
-    if(is_here){
-        value = (DBMap*)mp->get(tokens[1]);
-    }else{
+    auto *value = (DBMap*)mp->get(tokens[1]);
+    bool is_here = true;
+    if (value!=nullptr && value->type!=DBMAP_OBJECT) {
+        cout<<"This key has exist!"<<endl;
+        return;
+    }else if(value==nullptr){
         value = new DBMap();
+        is_here = false;
     }
 
-    for(int i=2;i<=tokens.size()-2;i=i+2){
-        value->insert(tokens[i], tokens[i+1]);
+    for (int i = 2; i <= tokens.size() - 2; i = i + 2) {
+        value->insert(tokens[i], tokens[i + 1]);
     }
     if(!is_here){
         mp->insert(tokens[1], value);
@@ -197,16 +249,64 @@ void VirtualMachine::hsetFunc(vector<string> tokens) {
 
 // hget map_name key
 void VirtualMachine::hgetFunc(vector<string> tokens) {
-    auto *p = (DBMap*)mp->get(tokens[1]);
-    if(p!= nullptr){
-        auto* value = p->get(tokens[2]);
-        if(value != nullptr){
-            cout<<value->values()<<endl;
-        }else{
-            cout<<"There is not this key in the db!"<<endl;
+    auto *p = (DBMap *) mp->get(tokens[1]);
+    if (p != nullptr && p->type == DBMAP_OBJECT) {
+        auto *value = p->get(tokens[2]);
+        if (value != nullptr) {
+            cout << value->values() << endl;
+        } else {
+            cout << "There is not this key in the db!" << endl;
         }
-    }else{
-        cout<<"There is not this db!"<<endl;
+    } else {
+        cout << "There is not this db!" << endl;
     }
 }
+
+//del key
+void VirtualMachine::delFunc(vector<string> tokens) {
+    mp->del(tokens[1]);
+}
+
+//ldel list_type_key index
+void VirtualMachine::ldelFunc(vector<string> tokens) {
+    auto *p = (DBList *) mp->get(tokens[1]);
+    if (p != nullptr && p->type == DBLIST_OBJECT) {
+        p->del(stoi(tokens[2]));
+    } else {
+        cout << "I can't del it!" << endl;
+    }
+
+}
+
+//hdel map_type_key key
+void VirtualMachine::hdelFunc(vector<string> tokens) {
+    auto *p = (DBMap *) mp->get(tokens[1]);
+    if (p != nullptr && p->type == DBMAP_OBJECT) {
+        p->del(tokens[2]);
+    } else {
+        cout << "I can't del it!" << endl;
+    }
+}
+
+
+//cat or cat map
+void VirtualMachine::catFunc(vector<string> tokens) {
+    if (tokens.size() == 1) {
+        mp->traversal();
+    } else {
+        auto *p = (DBMap *) mp->get(tokens[1]);
+        if (p != nullptr && p->type == DBMAP_OBJECT) {
+            p->traversal();
+        } else {
+            cout << "I can't cat it!" << endl;
+        }
+
+    }
+}
+
+
+void VirtualMachine::typeFunc(vector<string> tokens) {
+    mp->types(tokens[1]);
+}
+
 #endif //SQLDB_VM_H

@@ -22,9 +22,16 @@
 #define HSET 42
 #define HGET 43
 
+//del
+#define DEL 77
+#define LDEL 78
+#define HDEL 79
 
-#define EXIST 3
-#define EXIT 4
+#define TYPES 98
+#define CAT 99
+#define EXIST 100
+#define EXIT 101
+
 
 
 
@@ -39,9 +46,14 @@ void _init(std::map<std::string, int> &dict) {
     dict["hset"] = 42;
     dict["hget"] = 43;
 
+    dict["del"] = 77;
+    dict["ldel"] = 78;
+    dict["hdel"] = 79;
 
-    dict["exist"] = 3;
-    dict["exit"] = 4;
+    dict["types"] = 98;
+    dict["cat"] = 99;
+    dict["exist"] = 100;
+    dict["exit"] = 101;
 }
 
 

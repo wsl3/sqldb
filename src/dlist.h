@@ -157,7 +157,21 @@ void DBList::insert(std::string v, int index) {
 }
 
 void DBList::del(int index) {
-
+    if(index<0 || index>=length){
+        std::cout<<"I can't del it!"<<std::endl;
+        return;
+    }
+    if(index==0){
+        lpop();
+        return;
+    }
+    auto *p = head;
+    for(int i=0;i<index;i++){
+        p=p->next;
+    }
+    p->prev->next = p->next;
+    delete p;
+    length--;
 }
 
 void DBList::range(int begin, int end) {

@@ -1,6 +1,7 @@
 //
 // Created by wsl on 19-4-15.
 //
+#include "object.h"
 #include "dmap.h"
 
 //构造函数
@@ -88,8 +89,9 @@ void DBMap::insert(std::string key, std::string value){
     insert(key, p);
 }
 
+//查看内部情况
 void DBMap::traversal() {
-    std::cout << "size: " << ht->size << " used: " << ht->used << std::endl;
+    std::cout << "\nsize: " << ht->size << " used: " << ht->used << std::endl;
     for (int i = 0; i < ht->size; i++) {
         if (ht->entrys[i] == nullptr) {
             std::cout << i << "---> NULL" << std::endl;
@@ -97,7 +99,7 @@ void DBMap::traversal() {
             std::cout << i;
             auto *p = ht->entrys[i];
             while (p != nullptr) {
-                std::cout << "---> " << "( " << p->key->buff << ", " << p->value->type << " )";
+                std::cout << "---> " << "(key: " << p->key->buff << ", type: " << p->value->type << " )";
                 p = p->next;
             }
             std::cout << std::endl;
@@ -146,7 +148,7 @@ void DBMap::keys() {
 //rehash check
 void DBMap::rehashCheck() {
     if ((ht->used / (ht->size * 1.0)) >= 0.75) {
-        std::cout << "\n冲突因子大于0.75, 即将重新哈希...." << std::endl;
+        std::cout << "冲突因子大于0.75, 即将重新哈希...." << std::endl;
         rehash = 0;
         rehashFunction();
     }
@@ -189,4 +191,38 @@ bool DBMap::has_key(std::string key) {
         p = p->next;
     }
     return p!= nullptr? true : false;
+}
+
+void DBMap::del(std::string key) {
+    size_t index = hashFunc(key);
+    auto *p = ht->entrys[index];
+    if(p!=nullptr){
+        // 删除第一个
+        if(p->key->buff==key){
+            ht->entrys[index] = p->next;
+            delete p;
+            return;
+        }
+        while(p->next!=nullptr && p->next->key->buff!=key){p=p->next;}
+        if(p->next!=nullptr){
+            auto* temp = p->next;
+            p->next = temp->next;
+            delete temp;
+            return;
+        }
+    }
+    std::cout<<"I can't find the key:"<<key<<std::endl;
+}
+
+void DBMap::types(std::string key) {
+    auto *p = get(key);
+    if(p==nullptr){
+        std::cout<<"a key is None!"<<std::endl;
+        return;
+    }
+    switch(p->type){
+        case DBSTRING_OBJECT:std::cout<<"type: string"<<std::endl;break;
+        case DBLIST_OBJECT:std::cout<<"type: list"<<std::endl;break;
+        case DBMAP_OBJECT:std::cout<<"type: map"<<std::endl;break;
+    }
 }
