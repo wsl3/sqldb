@@ -15,7 +15,8 @@
 //list
 #define LPUSH 21
 #define RANGE 22
-
+#define LINSERT 23
+#define LSORT 24
 
 //map
 #define KEYS 41
@@ -41,6 +42,8 @@ void _init(std::map<std::string, int> &dict) {
 
     dict["lpush"] = 21;
     dict["range"] = 22;
+    dict["linsert"] = 23;
+    dict["lsort"] = 24;
 
     dict["keys"] = 41;
     dict["hset"] = 42;

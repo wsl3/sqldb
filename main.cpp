@@ -16,5 +16,6 @@ int main() {
     VirtualMachine vm = VirtualMachine();
 
     vm.run();
+
     return 0;
 }

@@ -46,7 +46,7 @@ public:
 
     void traversal();
 
-    void sort();
+    void sort(bool reverse=false);
 
     void insert(std::string v, int index);
 
@@ -75,6 +75,7 @@ DBList::~DBList() {
 }
 
 std::string DBList::values() {
+    traversal();
     return "List Values";
 }
 
@@ -143,31 +144,70 @@ void DBList::lpop() {
 void DBList::traversal() {
     int i;
     auto *p = head;
+    std::cout<<std::endl;
     for (i = 1; p != nullptr; i++, p = p->next) {
-        std::cout << i << " : " << p->buff << std::endl;
+        std::cout << i << "): " << p->buff << std::endl;
+    }
+    std::cout<<std::endl;
+}
+
+// to be updated
+void DBList::sort(bool reverse) {
+    auto *p = head;
+    auto *q = tail;
+    for(;p!=nullptr;p=p->next){
+        for(q=tail;q!=p;q=q->prev){
+            // reverse == false --> increment
+            if(!reverse && (p->buff > q->buff)){
+                std::string temp = p->buff;
+                p->buff = q->buff;
+                q->buff = temp;
+            }else if (reverse && (p->buff < q->buff)){
+                std::string temp = p->buff;
+                p->buff = q->buff;
+                q->buff = temp;
+            }
+        }
     }
 }
 
-void DBList::sort() {
-
-}
-
+// 如果index>length 默认insert到最后
 void DBList::insert(std::string v, int index) {
+    if (index < 0) {
+        std::cout << "Error: index can't < 0!" << std::endl;
+        return;
+    }
+    if(index == 0){
+        appendl(v);
+        return;
+    }
+    if(index>=length){
+        append(v);
+        return;
+    }
+    auto *p = head;
+    int i=0;
+    while(i<index){ i++;p=p->next;}
+    ListNode* temp = new ListNode(v);
+    temp->prev = p->prev;
+    temp->next = p;
+    p->prev->next = temp;
+    p->prev = temp;
 
 }
 
 void DBList::del(int index) {
-    if(index<0 || index>=length){
-        std::cout<<"I can't del it!"<<std::endl;
+    if (index < 0 || index >= length) {
+        std::cout << "I can't del it!" << std::endl;
         return;
     }
-    if(index==0){
+    if (index == 0) {
         lpop();
         return;
     }
     auto *p = head;
-    for(int i=0;i<index;i++){
-        p=p->next;
+    for (int i = 0; i < index; i++) {
+        p = p->next;
     }
     p->prev->next = p->next;
     delete p;
@@ -176,20 +216,21 @@ void DBList::del(int index) {
 
 void DBList::range(int begin, int end) {
 
-    if(begin>(length-1) || end <0 || begin>end){
-        std::cout<<"Error: Index is error!"<<std::endl;
+    if (begin > (length - 1) || end < 0 || begin > end) {
+        std::cout << "Error: Index is error!" << std::endl;
         return;
     }
-    int i=0;
+    int i = 0;
     auto *p = this->head;
-    while (i!=begin){
+    while (i != begin) {
         i++;
-        p=p->next;
+        p = p->next;
     }
-    while (begin<=end && p!= nullptr){
-        std::cout<<begin<<": "<<p->buff<<std::endl;
-        begin ++;
-        p=p->next;
+    while (begin <= end && p != nullptr) {
+        std::cout << begin << "): " << p->buff << std::endl;
+        begin++;
+        p = p->next;
     }
 }
+
 #endif //SQLDB_DLIST_H

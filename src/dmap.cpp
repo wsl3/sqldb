@@ -84,8 +84,8 @@ void DBMap::insert(std::string key, Object *value) {
 }
 
 // insert
-void DBMap::insert(std::string key, std::string value){
-    DBString* p = new DBString(value);
+void DBMap::insert(std::string key, std::string value) {
+    DBString *p = new DBString(value);
     insert(key, p);
 }
 
@@ -105,11 +105,12 @@ void DBMap::traversal() {
             std::cout << std::endl;
         }
     }
+    std::cout << std::endl;
 }
 
 
 // 字典 get(key) 操作
-Object* DBMap::get(std::string key) {
+Object *DBMap::get(std::string key) {
     size_t index = hashFunc(key);
     if (ht->entrys[index] == nullptr) {
         return nullptr;
@@ -127,6 +128,7 @@ Object* DBMap::get(std::string key) {
 }
 
 std::string DBMap::values() {
+    traversal();
     return "Map values";
 }
 
@@ -190,39 +192,45 @@ bool DBMap::has_key(std::string key) {
     while (p != nullptr && (p->key->buff) != key) {
         p = p->next;
     }
-    return p!= nullptr? true : false;
+    return p != nullptr ? true : false;
 }
 
 void DBMap::del(std::string key) {
     size_t index = hashFunc(key);
     auto *p = ht->entrys[index];
-    if(p!=nullptr){
+    if (p != nullptr) {
         // 删除第一个
-        if(p->key->buff==key){
+        if (p->key->buff == key) {
             ht->entrys[index] = p->next;
             delete p;
             return;
         }
-        while(p->next!=nullptr && p->next->key->buff!=key){p=p->next;}
-        if(p->next!=nullptr){
-            auto* temp = p->next;
+        while (p->next != nullptr && p->next->key->buff != key) { p = p->next; }
+        if (p->next != nullptr) {
+            auto *temp = p->next;
             p->next = temp->next;
             delete temp;
             return;
         }
     }
-    std::cout<<"I can't find the key:"<<key<<std::endl;
+    std::cout << "I can't find the key:" << key << std::endl;
 }
 
 void DBMap::types(std::string key) {
     auto *p = get(key);
-    if(p==nullptr){
-        std::cout<<"a key is None!"<<std::endl;
+    if (p == nullptr) {
+        std::cout << "a key is None!" << std::endl;
         return;
     }
-    switch(p->type){
-        case DBSTRING_OBJECT:std::cout<<"type: string"<<std::endl;break;
-        case DBLIST_OBJECT:std::cout<<"type: list"<<std::endl;break;
-        case DBMAP_OBJECT:std::cout<<"type: map"<<std::endl;break;
+    switch (p->type) {
+        case DBSTRING_OBJECT:
+            std::cout << "type: string" << std::endl;
+            break;
+        case DBLIST_OBJECT:
+            std::cout << "type: list" << std::endl;
+            break;
+        case DBMAP_OBJECT:
+            std::cout << "type: map" << std::endl;
+            break;
     }
 }
