@@ -1,5 +1,5 @@
 # sqldb
-一个小型的数据库引擎
+一个小型的数据库引擎(a simple database engine)
 
 ### V1.0
 **1.  底层数据结构**
@@ -19,4 +19,4 @@
  * 各种删除命令
   ![avatar](http://39.107.83.159/static/update_images/sqldb_5_03_05.png)
  * 其他命令
-  ![avatar](http://39.107.83.159/static/update_images/sqldb_5_03_06.png)
+ ![avatar](http://39.107.83.159/static/update_images/sqldb_5_03_06.png)
