@@ -7,6 +7,8 @@
 
 #include <vector>
 #include <string>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include "../error/excptions.h"
 
 // string ---> tokens
@@ -49,15 +51,16 @@ void lexer(std::string str, std::vector<std::string> &tokens) {
 }
 
 
-
 //从命令行读取 string, 返回 tokens
 std::vector<std::string> readCommand() {
 
-    std::string str;
+
     std::vector<std::string> tokens;
-    std::cout<<"sqldb >>> ";
-    std::getline(std::cin, str);
+    char* input = readline("sqldb >>> ");
+    add_history(input);
+    std::string str(input);
     lexer(str, tokens);
+    free(input);
     return tokens;
 }
 

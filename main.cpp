@@ -3,19 +3,22 @@
 //
 
 #include <iostream>
+#include <stdio.h>
 #include "src/dstring.h"
 #include"src/dlist.h"
 #include "src/dmap.h"
 #include "vm/compile.h"
 #include "vm/vm.h"
 
+
+#include <fstream>
 using namespace std;
 
 int main() {
-
-    VirtualMachine vm = VirtualMachine();
-
+    VirtualMachine vm;
     vm.run();
-
     return 0;
+
 }
+
+

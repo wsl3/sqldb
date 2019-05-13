@@ -13,6 +13,7 @@ public:
     unsigned long length; //buff.length() 返回值为 unsigned long
     std::string buff;
 
+    DBString();
     explicit DBString(std::string s);
     std::string values() override;
     ~DBString() override;
@@ -28,6 +29,9 @@ std::string DBString::values() {
 DBString::~DBString() {
     std::cout<< "delete "<<buff<<std::endl;
 }
-
+DBString::DBString():Object(DBSTRING_OBJECT) {
+    buff="";
+    length=0;
+}
 
 #endif //SQLDB_DSTRING_H

@@ -28,13 +28,13 @@
 #define LDEL 78
 #define HDEL 79
 
+//save
+#define SAVE 80
+
 #define TYPES 98
 #define CAT 99
 #define EXIST 100
 #define EXIT 101
-
-
-
 
 void _init(std::map<std::string, int> &dict) {
     dict["get"] = 1;
@@ -52,6 +52,8 @@ void _init(std::map<std::string, int> &dict) {
     dict["del"] = 77;
     dict["ldel"] = 78;
     dict["hdel"] = 79;
+
+    dict["save"] = 80;
 
     dict["types"] = 98;
     dict["cat"] = 99;

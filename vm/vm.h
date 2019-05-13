@@ -50,6 +50,7 @@ private:
 
     void lsortFunc(vector<string> tokens);
 
+    void saveFunc();
 public:
     VirtualMachine();
 
@@ -118,7 +119,9 @@ void VirtualMachine::run() {
             case EXIST:
                 existFunc(tokens);
                 break;
-
+            case SAVE:
+                saveFunc();
+                break;
                 //type 检查key的类型
             case TYPES:
                 typeFunc(tokens);
@@ -348,6 +351,10 @@ void VirtualMachine::catFunc(vector<string> tokens) {
 
 void VirtualMachine::typeFunc(vector<string> tokens) {
     mp->types(tokens[1]);
+}
+
+void VirtualMachine::saveFunc() {
+    std::cout<<"save 操作\n";
 }
 
 #endif //SQLDB_VM_H
