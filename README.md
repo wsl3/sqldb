@@ -18,5 +18,5 @@
   ![avatar](http://39.107.83.159/static/update_images/sqldb_5_03_04.png)
  * 各种删除命令
   ![avatar](http://39.107.83.159/static/update_images/sqldb_5_03_05.png)
- * 其他命令
+  * 其他命令
  ![avatar](http://39.107.83.159/static/update_images/sqldb_5_03_06.png)
